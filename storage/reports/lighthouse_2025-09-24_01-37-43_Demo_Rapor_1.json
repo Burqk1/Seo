@@ -1,0 +1,90 @@
+{
+    "lighthouseVersion": "10.4.0",
+    "requestedUrl": "https:\/\/demo1.example.com",
+    "finalUrl": "https:\/\/demo1.example.com",
+    "fetchTime": "2025-09-24 01:37:43",
+    "categories": {
+        "performance": {
+            "score": 0.84,
+            "title": "Performans",
+            "description": "Sayfanın yüklenme hızı ve kullanıcı deneyimi metrikleri"
+        },
+        "seo": {
+            "score": 0.94,
+            "title": "SEO",
+            "description": "Arama motoru optimizasyonu faktörleri"
+        },
+        "accessibility": {
+            "score": 0.94,
+            "title": "Erişilebilirlik",
+            "description": "Engelli kullanıcılar için erişilebilirlik standartları"
+        }
+    },
+    "audits": {
+        "first-contentful-paint": {
+            "title": "İlk İçerik Boyama",
+            "description": "İlk metin veya görsel öğenin render edilme süresi",
+            "score": 1,
+            "displayValue": "1.2s",
+            "category": "performance"
+        },
+        "largest-contentful-paint": {
+            "title": "En Büyük İçerik Boyama",
+            "description": "En büyük görsel\/metin öğesinin render süresi",
+            "score": 1,
+            "displayValue": "2.1s",
+            "category": "performance"
+        },
+        "speed-index": {
+            "title": "Hız İndeksi",
+            "description": "Sayfanın görsel olarak yüklenme hızı",
+            "score": 1,
+            "displayValue": "2.8s",
+            "category": "performance"
+        },
+        "document-title": {
+            "title": "Sayfa Başlığı",
+            "description": "Sayfada uygun title etiketi var mı?",
+            "score": 1,
+            "displayValue": "Başlık mevcut",
+            "category": "seo"
+        },
+        "meta-description": {
+            "title": "Meta Açıklama",
+            "description": "Sayfada meta description var mı?",
+            "score": 1,
+            "displayValue": "Meta açıklama mevcut",
+            "category": "seo"
+        },
+        "crawlable-anchors": {
+            "title": "Taranabilir Bağlantılar",
+            "description": "Bağlantılar arama motorları tarafından taranabilir mi?",
+            "score": 1,
+            "displayValue": "Tüm bağlantılar OK",
+            "category": "seo"
+        },
+        "color-contrast": {
+            "title": "Renk Kontrast",
+            "description": "Metin ve arka plan arasında yeterli kontrast var mı?",
+            "score": 1,
+            "displayValue": "Kontrast yeterli",
+            "category": "accessibility"
+        },
+        "image-alt": {
+            "title": "Görsel Alt Metinleri",
+            "description": "Görsellerde alt attribute var mı?",
+            "score": 1,
+            "displayValue": "Alt metinler mevcut",
+            "category": "accessibility"
+        }
+    },
+    "configSettings": {
+        "emulatedFormFactor": "desktop",
+        "locale": "tr-TR",
+        "onlyCategories": [
+            "performance",
+            "seo",
+            "accessibility"
+        ]
+    }
+}

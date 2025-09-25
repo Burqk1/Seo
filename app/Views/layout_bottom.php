@@ -1,0 +1,1 @@
+</main><footer class="footer">© <?= date('Y') ?> Bilişim</footer></body></html>
