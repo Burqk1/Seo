@@ -1,104 +1,104 @@
 # Müşteri Destek & SEO Raporlama Paneli
 
-Framework kullanılmadan, düz PHP ile yazılmış küçük bir yönetim paneli. Panelde üç bölüm var: giriş yapan kullanıcıların destek talebi açıp durumunu güncelleyebildiği bir talep modülü, Lighthouse JSON raporlarını içe aktaran ve URL'ler için SEO analizi yapan bir raporlama modülü, ve bu verileri Chart.js grafiğiyle özetleyen bir dashboard. Veriler MySQL'de, rapor dosyaları `storage/reports/` altında JSON olarak tutuluyor. Arayüz Türkçe.
+A small admin panel written in plain PHP, without a framework. It has three parts: a ticket module where logged-in users can open support tickets and update their status, a reporting module that imports Lighthouse JSON reports and runs SEO analysis on URLs, and a dashboard that summarizes this data with a Chart.js chart. Data is stored in MySQL, and report files are kept as JSON under `storage/reports/`. The UI is in Turkish.
 
-## Özellikler
+## Features
 
-- **Kimlik doğrulama**: E-posta ve şifreyle kayıt / giriş (`password_hash` ile BCRYPT). Şifre en az 6 karakter olmalı. Bütün POST formlarında oturuma bağlı bir CSRF token'ı kontrol ediliyor (`_csrf` alanı veya `X-CSRF` başlığı).
-- **Destek talepleri** (`/tickets`): Konu ve açıklamayla yeni talep açma, tüm talepleri listeleme, durum güncelleme (`new`, `in_progress`, `resolved`).
-- **SEO raporları** (`/reports`):
-  - **Manuel yükleme**: Lighthouse JSON dosyası yükleniyor; `categories.seo`, `performance` ve `accessibility` skorları okunuyor.
-  - **URL analizi**: Tek bir URL için Lighthouse (PageSpeed Insights v5) ve sayfa HTML'i üzerinden kendi SEO denetimi birlikte çalıştırılıyor.
-  - **Toplu analiz**: En fazla 10 URL, her biri arasında 2 saniye bekleme.
-  - **Demo raporlar** (`/reports/demo`): Üç örnek rapor oluşturuyor.
-  - **Rapor detayı**: Modal pencerede kayıtlı JSON içeriği gösteriliyor.
-- **SEO denetimi** (`app/Services/SeoAnalyzer.php`): `title` (var mı, uzunluğu), meta description, H1/başlık yapısı, görsellerde `alt` metni, boş bağlantılar, `viewport`, `charset` ve `<html lang>` kontrolleri. Skor 100'den başlıyor; her sorun için puan düşülüyor (critical −20, error −15, warning −10, info −5).
-- **Dashboard** (`/`): Toplam ve açık talep sayısı, bugün çözülen talepler, son 7 günde açılan talepler, rapor sayısı, son 30 gündeki rapor sayısı, ortalama SEO skoru, son raporun hız skoru ve son 10 raporun Hız / SEO / Erişilebilirlik grafiği.
-- Açık/koyu tema geçişi ve mobil menü (`public/js/app.js`, `public/css/styles.css`).
+- **Authentication**: Registration / login with email and password (BCRYPT via `password_hash`). Passwords must be at least 6 characters. Every POST form checks a session-bound CSRF token (the `_csrf` field or the `X-CSRF` header).
+- **Support tickets** (`/tickets`): Opening a new ticket with a subject and description, listing all tickets, and updating status (`new`, `in_progress`, `resolved`).
+- **SEO reports** (`/reports`):
+  - **Manual upload**: A Lighthouse JSON file is uploaded; the `categories.seo`, `performance` and `accessibility` scores are read.
+  - **URL analysis**: For a single URL, Lighthouse (PageSpeed Insights v5) and a custom SEO audit of the page HTML run together.
+  - **Bulk analysis**: Up to 10 URLs, with a 2-second wait between each.
+  - **Demo reports** (`/reports/demo`): Creates three sample reports.
+  - **Report detail**: The stored JSON content is shown in a modal window.
+- **SEO audit** (`app/Services/SeoAnalyzer.php`): Checks `title` (presence, length), meta description, H1/heading structure, `alt` text on images, empty links, `viewport`, `charset` and `<html lang>`. The score starts at 100 and points are deducted for each issue (critical −20, error −15, warning −10, info −5).
+- **Dashboard** (`/`): Total and open ticket counts, tickets resolved today, tickets opened in the last 7 days, report count, reports in the last 30 days, average SEO score, the latest report's performance score, and a Performance / SEO / Accessibility chart of the last 10 reports.
+- Light/dark theme toggle and mobile menu (`public/js/app.js`, `public/css/styles.css`).
 
-## Teknoloji
+## Technology
 
-- PHP (typed property ve arrow function kullanıldığı için 7.4 veya üzeri), PDO
+- PHP (7.4 or later, since typed properties and arrow functions are used), PDO
 - MySQL (`utf8mb4`)
-- Chart.js (jsDelivr CDN üzerinden)
-- Vanilla JavaScript ve CSS
-- Google PageSpeed Insights API v5 (opsiyonel; aşağıya bakın)
+- Chart.js (via the jsDelivr CDN)
+- Vanilla JavaScript and CSS
+- Google PageSpeed Insights API v5 (optional; see below)
 
-## Proje yapısı
+## Project structure
 
 ```
 app/
-├── Auth.php                    # Oturum, CSRF, giriş/kayıt
-├── Db.php                      # PDO sarmalayıcı
+├── Auth.php                    # Session, CSRF, login/registration
+├── Db.php                      # PDO wrapper
 ├── Controllers/
 │   ├── AuthController.php
 │   ├── DashboardController.php
 │   ├── TicketController.php
 │   └── ReportController.php
 ├── Services/
-│   ├── LighthouseService.php   # PageSpeed API çağrısı / demo rapor üretimi, JSON kaydetme
-│   └── SeoAnalyzer.php         # HTML tabanlı SEO denetimi
-└── Views/                      # layout, giriş, talepler, raporlar şablonları
+│   ├── LighthouseService.php   # PageSpeed API call / demo report generation, JSON saving
+│   └── SeoAnalyzer.php         # HTML-based SEO audit
+└── Views/                      # layout, login, tickets, reports templates
 public/
-├── index.php                   # Front controller ve router
+├── index.php                   # Front controller and router
 ├── css/styles.css
 └── js/app.js
-storage/reports/                # Yüklenen / üretilen JSON raporlar
-schema.sql                      # users, tickets, seo_reports tabloları
+storage/reports/                # Uploaded / generated JSON reports
+schema.sql                      # users, tickets, seo_reports tables
 ```
 
-## Gereksinimler
+## Requirements
 
-- PHP 7.4+ ve `pdo_mysql`, `dom` eklentileri
-- URL analizi için `allow_url_fopen` açık olmalı (sayfalar `file_get_contents` ile çekiliyor)
-- MySQL veya MariaDB
-- `storage/reports/` klasörüne web sunucusunun yazabilmesi
+- PHP 7.4+ with the `pdo_mysql` and `dom` extensions
+- `allow_url_fopen` must be enabled for URL analysis (pages are fetched with `file_get_contents`)
+- MySQL or MariaDB
+- The web server must be able to write to the `storage/reports/` folder
 
-## Kurulum
+## Setup
 
-1. MySQL'de `mds` adında bir veritabanı oluşturun ve `schema.sql` dosyasını içe aktarın:
+1. Create a database named `mds` in MySQL and import `schema.sql`:
    ```bash
    mysql -u root -e "CREATE DATABASE mds CHARACTER SET utf8mb4"
    mysql -u root mds < schema.sql
    ```
-2. Veritabanı bağlantı bilgilerini `public/index.php` içindeki `$config` dizisinden düzenleyin. Varsayılan: `mysql:host=localhost;dbname=mds;charset=utf8mb4`, kullanıcı `root`, şifre boş.
-3. Web sunucusunun kök dizinini `public/` olarak ayarlayın. Tüm istekler `public/index.php` üzerinden yönlendiriliyor, bu yüzden var olmayan yollar bu dosyaya düşmeli. Depoda `.htaccess` yok. Geliştirme için PHP'nin dahili sunucusu yeterli:
+2. Edit the database connection details in the `$config` array in `public/index.php`. Default: `mysql:host=localhost;dbname=mds;charset=utf8mb4`, user `root`, empty password.
+3. Set the web server's document root to `public/`. All requests are routed through `public/index.php`, so nonexistent paths must fall through to this file. There is no `.htaccess` in the repository. PHP's built-in server is enough for development:
    ```bash
    php -S localhost:8000 -t public
    ```
-4. `/login` sayfasından bir hesap oluşturup giriş yapın.
-5. `/reports` ekranından örnek bir JSON yükleyin (örneğin `storage/reports/sample_lighthouse.json`) ya da "Demo Raporlar Oluştur" butonunu kullanın.
+4. Create an account on the `/login` page and log in.
+5. On the `/reports` screen, upload a sample JSON (for example `storage/reports/sample_lighthouse.json`) or use the "Demo Raporlar Oluştur" ("Create Demo Reports") button.
 
-## Rotalar
+## Routes
 
-| Yol | Metot | Açıklama |
+| Path | Method | Description |
 |---|---|---|
-| `/login`, `/register` | GET / POST | Giriş ve kayıt |
-| `/logout` | POST | Çıkış |
+| `/login`, `/register` | GET / POST | Login and registration |
+| `/logout` | POST | Logout |
 | `/` | GET | Dashboard |
-| `/tickets` | GET | Talep listesi ve formu |
-| `/tickets/store`, `/tickets/update` | POST | Talep ekleme / durum güncelleme |
-| `/reports` | GET | Rapor ekranı |
-| `/reports/upload` | POST | Lighthouse JSON yükleme (`json` dosya alanı, `label`) |
-| `/reports/analyze-url` | POST | Tek URL analizi (JSON yanıt) |
-| `/reports/analyze-bulk` | POST | Toplu analiz, `urls` alanında satır başına bir URL (JSON yanıt) |
-| `/reports/demo` | GET | Demo rapor üretimi |
-| `/reports/api/detail?id=` | GET | Rapor kaydı + JSON içeriği |
-| `/api/reports/last10` | GET | Grafik için son 10 rapor |
+| `/tickets` | GET | Ticket list and form |
+| `/tickets/store`, `/tickets/update` | POST | Add ticket / update status |
+| `/reports` | GET | Reports screen |
+| `/reports/upload` | POST | Lighthouse JSON upload (`json` file field, `label`) |
+| `/reports/analyze-url` | POST | Single URL analysis (JSON response) |
+| `/reports/analyze-bulk` | POST | Bulk analysis, one URL per line in the `urls` field (JSON response) |
+| `/reports/demo` | GET | Demo report generation |
+| `/reports/api/detail?id=` | GET | Report record + JSON content |
+| `/api/reports/last10` | GET | Last 10 reports for the chart |
 
-`/login`, `/register` ve `/logout` dışındaki bütün sayfa ve API uçları oturum gerektiriyor; giriş yapılmamışsa `/login`'e yönlendiriliyor.
+All pages and API endpoints except `/login`, `/register` and `/logout` require a session; if not logged in, the user is redirected to `/login`.
 
-## Önemli: Lighthouse skorları şu an simüle ediliyor
+## Important: Lighthouse scores are currently simulated
 
-`LighthouseService` bir API anahtarı alabiliyor, ama `ReportController` servisi anahtarsız oluşturuyor (`new LighthouseService()`). Anahtar boş kalınca yer tutucu bir değer (`AIzaSyDemoKeyForProject123`) atanıyor ve servis gerçek API'yi çağırmak yerine URL'in `crc32` hash'inden türetilen sahte bir rapor döndürüyor. Bu yüzden URL ve toplu analizdeki performans, SEO ve erişilebilirlik skorları gerçek ölçüm değil. Gerçek PageSpeed sonuçları için `ReportController` yapıcısında geçerli bir Google API anahtarı verilmeli:
+`LighthouseService` can take an API key, but `ReportController` creates the service without one (`new LighthouseService()`). When the key is empty, a placeholder value (`AIzaSyDemoKeyForProject123`) is assigned and the service returns a fake report derived from the `crc32` hash of the URL instead of calling the real API. As a result, the performance, SEO and accessibility scores in URL and bulk analysis are not real measurements. For real PageSpeed results, a valid Google API key must be passed in the `ReportController` constructor:
 
 ```php
 $this->lighthouse = new LighthouseService('GERCEK_API_ANAHTARI');
 ```
 
-Benzer şekilde `SeoAnalyzer` adresinde `demo` veya `test` geçen URL'lerde ve sayfa çekilemediğinde, hata vermek yerine üretilmiş örnek bir HTML'i analiz ediyor.
+Similarly, for URLs containing `demo` or `test`, and when the page can't be fetched, `SeoAnalyzer` analyzes a generated sample HTML instead of returning an error.
 
-## Bilinen eksikler
+## Known gaps
 
-- Yüklenen JSON dosyalarının içeriği doğrulanmıyor; dosya doğrudan `storage/reports/` altına kaydediliyor.
-- Depoda lisans dosyası yok; lisans belirtilmemiş.
+- The content of uploaded JSON files is not validated; the file is saved directly under `storage/reports/`.
+- The repository has no license file; no license is specified.
