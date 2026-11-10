@@ -86,6 +86,8 @@ schema.sql                      # users, tickets, seo_reports tabloları
 | `/reports/api/detail?id=` | GET | Rapor kaydı + JSON içeriği |
 | `/api/reports/last10` | GET | Grafik için son 10 rapor |
 
+`/login`, `/register` ve `/logout` dışındaki bütün sayfa ve API uçları oturum gerektiriyor; giriş yapılmamışsa `/login`'e yönlendiriliyor.
+
 ## Önemli: Lighthouse skorları şu an simüle ediliyor
 
 `LighthouseService` bir API anahtarı alabiliyor, ama `ReportController` servisi anahtarsız oluşturuyor (`new LighthouseService()`). Anahtar boş kalınca yer tutucu bir değer (`AIzaSyDemoKeyForProject123`) atanıyor ve servis gerçek API'yi çağırmak yerine URL'in `crc32` hash'inden türetilen sahte bir rapor döndürüyor. Bu yüzden URL ve toplu analizdeki performans, SEO ve erişilebilirlik skorları gerçek ölçüm değil. Gerçek PageSpeed sonuçları için `ReportController` yapıcısında geçerli bir Google API anahtarı verilmeli:
@@ -98,7 +100,5 @@ Benzer şekilde `SeoAnalyzer` adresinde `demo` veya `test` geçen URL'lerde ve s
 
 ## Bilinen eksikler
 
-- Menüdeki `/profile` ve `/settings` bağlantıları için rota tanımlı değil; bu sayfalar 404 döndürüyor.
-- `/reports/api/detail` ve `/api/reports/last10` uçları oturum kontrolü yapmıyor.
 - Yüklenen JSON dosyalarının içeriği doğrulanmıyor; dosya doğrudan `storage/reports/` altına kaydediliyor.
 - Depoda lisans dosyası yok; lisans belirtilmemiş.

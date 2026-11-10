@@ -204,6 +204,7 @@ class ReportController
 
     public function apiLast10(): void
     {
+        $this->auth->requireLogin();
         header('Content-Type: application/json; charset=utf-8');
         
         $list = $this->db->pdo()->query("
@@ -219,6 +220,8 @@ class ReportController
 
     public function apiReportDetail(): void
     {
+        $this->auth->requireLogin();
+
         $reportId = (int)($_GET['id'] ?? 0);
         
         if (!$reportId) {

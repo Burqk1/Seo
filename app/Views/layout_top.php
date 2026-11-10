@@ -66,15 +66,6 @@ $user = $this->auth->user();
             </button>
             
             <div class="dropdown-menu">
-              <a href="/profile" class="dropdown-item">
-                <span class="dropdown-icon">👤</span>
-                Profil
-              </a>
-              <a href="/settings" class="dropdown-item">
-                <span class="dropdown-icon">⚙️</span>
-                Ayarlar
-              </a>
-              <div class="dropdown-divider"></div>
               <form action="/logout" method="post" class="dropdown-form">
                 <input type="hidden" name="_csrf" value="<?= $this->auth->csrf() ?>">
                 <button type="submit" class="dropdown-item logout-btn">
@@ -121,14 +112,6 @@ $user = $this->auth->user();
             SEO Rapor
           </a>
           <div class="mobile-divider"></div>
-          <a href="/profile" class="mobile-nav-link">
-            <span class="mobile-nav-icon">👤</span>
-            Profil
-          </a>
-          <a href="/settings" class="mobile-nav-link">
-            <span class="mobile-nav-icon">⚙️</span>
-            Ayarlar
-          </a>
           <form action="/logout" method="post" class="mobile-logout-form">
             <input type="hidden" name="_csrf" value="<?= $this->auth->csrf() ?>">
             <button type="submit" class="mobile-nav-link logout">
